@@ -1,8 +1,9 @@
 function addBoard() {
     let size;
-    while (typeof size !== 'number' || size < 1 || size > 64) {
+    do {
         size = parseInt(prompt("What size grid? Max 64"));
-    }
+        console.log(size);
+    } while (typeof size !== 'number' || isNaN(size) || size < 1 || size > 64);
 
     const board = document.querySelector('.board');
     const boardStyle = window.getComputedStyle(board);
@@ -19,36 +20,51 @@ function addBoard() {
     }
 }
 
-function changeBackgroundColor(e, color) {
-    if (e.target.style.backgroundColor === 'white')
-    {
-        e.target.style.backgroundColor = color;
-        e.target.style.border = '0';
-    }// else {
-    //    e.target.style.backgroundColor = 'white';
-    //    e.target.style.border = '1px solid lightgray';
-    //}
-}
-
-function resetBackgroundColors() {
-    const tiles = document.querySelectorAll('.tile');
-    tiles.forEach((tile) => {
-        tile.style.backgroundColor = 'white';
-        tile.style.border = '1px solid lightgray';
-    });
+function removeBoard() {
+    document.querySelector('.board').innerHTML = '';
 }
 
 function addEventHandlers() {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach((tile) => {
         tile.addEventListener('mouseover', (e) => {
-            changeBackgroundColor(e, 'skyblue');
+            changeBackgroundColor(e);
+        });
+
+        tile.addEventListener('click', () => {
+            if (globalDrawBool) {
+                globalDrawBool = false;
+            } else {
+                globalDrawBool = true;
+            }
         });
     });
 }
 
-function removeBoard() {
-    document.querySelector('.board').innerHTML = '';
+function selectBackgroundColor(color) {
+    document.querySelector('.selected').classList.remove('selected');
+    console.log(color.id);
+    color.classList.add('selected');
+    if (color.id === 'picker') {
+        globalColor = color.value;
+    } else {
+        globalColor = color.id;
+    }
+}
+
+function changeBackgroundColor(e) {
+    if (globalDrawBool) {
+        e.target.style.backgroundColor = globalColor;
+        e.target.style.border = '0';
+    }
+}
+
+function resetBackgroundColors() {
+    const tiles = document.querySelectorAll('.tile');
+    tiles.forEach((tile) => {
+        tile.style.backgroundColor = 'white';
+        //tile.style.border = '1px solid lightgray';
+    });
 }
 
 function createNewBoard() {
@@ -62,5 +78,20 @@ newBoardBtn.addEventListener('click', createNewBoard);
 
 const reset = document.querySelector('.reset');
 reset.addEventListener('click', resetBackgroundColors);
+
+const colors = document.querySelectorAll('.color');
+colors.forEach((color) => {
+    color.addEventListener('click', () => {
+        selectBackgroundColor(color);
+    });
+});
+
+const picker = document.querySelector('#picker');
+picker.addEventListener('input', () => {
+    globalColor = picker.value;
+});
+
+let globalColor = 'skyblue';
+let globalDrawBool = false;
 
 createNewBoard();
