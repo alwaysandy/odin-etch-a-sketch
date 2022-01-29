@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-size: 0;
+    background-color: orange;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+button {
+    font-size: 14px;
+}
+
+.function-buttons {
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.board {
+    width: 80vh;
+    height:80vh;
+}
+
+.tile {
+    display: inline-block;
+    box-sizing: border-box;
+    border: 1px solid lightgray;
+}
