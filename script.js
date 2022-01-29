@@ -3,7 +3,7 @@ function addBoard() {
     do {
         size = parseInt(prompt("What size grid? Max 64"));
         console.log(size);
-    } while (typeof size !== 'number' || isNaN(size) || size < 1 || size > 64);
+    } while (isNaN(size) || size < 1 || size > 64);
 
     const board = document.querySelector('.board');
     const boardStyle = window.getComputedStyle(board);
@@ -24,66 +24,59 @@ function removeBoard() {
     document.querySelector('.board').innerHTML = '';
 }
 
-function addEventHandlers() {
+function addTileEventHandlers() {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach((tile) => {
-        tile.addEventListener('mouseover', (e) => {
-            changeBackgroundColor(e);
-        });
-
-        tile.addEventListener('click', () => {
-            if (globalDrawBool) {
-                globalDrawBool = false;
-            } else {
-                globalDrawBool = true;
-            }
+        tile.addEventListener('mouseover', changeTileColor);
+        tile.addEventListener('click', (e) => {
+            globalDrawBool = !globalDrawBool
+            changeTileColor(e);
         });
     });
 }
 
-function selectBackgroundColor(color) {
+function selectColor(e) {
+    let colorSelector = e.target;
     document.querySelector('.selected').classList.remove('selected');
-    console.log(color.id);
-    color.classList.add('selected');
-    if (color.id === 'picker') {
-        globalColor = color.value;
+    console.log(colorSelector.id);
+    colorSelector.classList.add('selected');
+    if (colorSelector.id === 'picker') {
+        globalColor = colorSelector.value;
     } else {
-        globalColor = color.id;
+        globalColor = colorSelector.id;
     }
 }
 
-function changeBackgroundColor(e) {
+function changeTileColor(e) {
+    let tile = e.target;
     if (globalDrawBool) {
-        e.target.style.backgroundColor = globalColor;
-        e.target.style.border = '0';
+        tile.style.backgroundColor = globalColor;
+        tile.style.border = '0';
     }
 }
 
-function resetBackgroundColors() {
+function resetTileColors() {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach((tile) => {
         tile.style.backgroundColor = 'white';
-        //tile.style.border = '1px solid lightgray';
     });
 }
 
 function createNewBoard() {
     removeBoard();
     addBoard();
-    addEventHandlers();
+    addTileEventHandlers();
 }
 
 const newBoardBtn = document.querySelector('.new-board');
 newBoardBtn.addEventListener('click', createNewBoard);
 
 const reset = document.querySelector('.reset');
-reset.addEventListener('click', resetBackgroundColors);
+reset.addEventListener('click', resetTileColors);
 
-const colors = document.querySelectorAll('.color');
-colors.forEach((color) => {
-    color.addEventListener('click', () => {
-        selectBackgroundColor(color);
-    });
+const colorSelectors = document.querySelectorAll('.color');
+colorSelectors.forEach((colorSelector) => {
+    colorSelector.addEventListener('click', selectColor);
 });
 
 const picker = document.querySelector('#picker');
