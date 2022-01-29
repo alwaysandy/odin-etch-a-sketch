@@ -1,17 +1,22 @@
-function addBoard() {
+function getBoardSize() {
     let size;
     do {
         size = parseInt(prompt("What size grid? Max 64"));
         console.log(size);
     } while (isNaN(size) || size < 1 || size > 64);
 
+    return size;
+}
+
+function addTiles() {
+    const size = getBoardSize();
     const board = document.querySelector('.board');
     const boardStyle = window.getComputedStyle(board);
     const boardWidth = parseInt(boardStyle.width);
     const boardHeight = parseInt(boardStyle.height);
-    
+    let tile;
     for (let i = 0; i < size * size; i++) {
-        let tile = document.createElement('div');
+        tile = document.createElement('div');
         tile.classList.add('tile');
         tile.style.width = `${boardWidth / size}px`;
         tile.style.height = `${boardHeight / size}px`;
@@ -20,11 +25,11 @@ function addBoard() {
     }
 }
 
-function removeBoard() {
+function removeTiles() {
     document.querySelector('.board').innerHTML = '';
 }
 
-function addTileEventHandlers() {
+function addTileEventListeners() {
     const tiles = document.querySelectorAll('.tile');
     tiles.forEach((tile) => {
         tile.addEventListener('mouseover', changeTileColor);
@@ -36,7 +41,7 @@ function addTileEventHandlers() {
 }
 
 function selectColor(e) {
-    let colorSelector = e.target;
+    const colorSelector = e.target;
     document.querySelector('.selected').classList.remove('selected');
     console.log(colorSelector.id);
     colorSelector.classList.add('selected');
@@ -48,7 +53,7 @@ function selectColor(e) {
 }
 
 function changeTileColor(e) {
-    let tile = e.target;
+    const tile = e.target;
     if (globalDrawBool) {
         tile.style.backgroundColor = globalColor;
         tile.style.border = '0';
@@ -63,9 +68,9 @@ function resetTileColors() {
 }
 
 function createNewBoard() {
-    removeBoard();
-    addBoard();
-    addTileEventHandlers();
+    removeTiles();
+    addTiles();
+    addTileEventListeners();
 }
 
 const newBoardBtn = document.querySelector('.new-board');
@@ -88,3 +93,7 @@ let globalColor = 'skyblue';
 let globalDrawBool = false;
 
 createNewBoard();
+
+// TODO add grayscale
+// then finished???
+// TODO add drawing indicator
