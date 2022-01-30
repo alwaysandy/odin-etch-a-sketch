@@ -35,7 +35,7 @@ function addTileEventListeners() {
         tile.addEventListener('mouseover', changeTileColor);
         tile.addEventListener('click', (e) => {
             globalDrawBool = !globalDrawBool
-            changeTileColor(e);
+            if (globalDrawBool) changeTileColor(e);
         });
     });
 }
@@ -89,7 +89,7 @@ picker.addEventListener('input', () => {
     globalColor = picker.value;
 });
 
-let globalColor = 'skyblue';
+let globalColor = document.querySelector('.selected').id;
 let globalDrawBool = false;
 
 createNewBoard();
